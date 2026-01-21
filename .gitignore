@@ -1,0 +1,22 @@
+# Node
+node_modules/
+.env
+uploads/
+Data_Preprocessing.py
+DICOMtoPNG.py
+Grad_cam.py
+Model_evaluation.py
+selectImage.py
+Train_model.py
+# Python
+__pycache__/
+*.pyc
+venv/
+python_api/uploads/
+python_api/heatmaps/
+
+# ML models (too large)
+*.h5
+
+# OS
+.DS_Store
