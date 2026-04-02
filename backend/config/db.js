@@ -1,4 +1,5 @@
-require("dotenv").config();
+// require("dotenv").config();
+require("dotenv").config({ path: __dirname + "/../.env" });
 const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize(
@@ -10,5 +11,6 @@ const sequelize = new Sequelize(
     dialect: "mysql"
   }
 );
-
+console.log(process.env.DB_USER);
+console.log(process.env.DB_PASSWORD);
 module.exports = sequelize;

@@ -1,5 +1,11 @@
+// backend/middleware/uploadMiddleware.js
+// =======================================
+// Change from original:
+//   Now accepts PNG, JPG, JPEG (not just PNG)
+//   Medical images can be any of these formats
+
 const multer = require("multer");
-const path = require("path");
+const path   = require("path");
 
 const storage = multer.diskStorage({
   destination: "uploads/",
@@ -9,16 +15,18 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype === "image/png") {
+  const allowed = ["image/png", "image/jpeg", "image/jpg"];
+  if (allowed.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Only PNG images allowed"), false);
+    cb(new Error("Only PNG and JPG images are allowed"), false);
   }
 };
 
 const upload = multer({
   storage,
-  fileFilter
+  fileFilter,
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB max
 });
 
 module.exports = upload;

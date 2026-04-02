@@ -1,5 +1,8 @@
 flask
-tensorflow
-opencv-python
-numpy
+flask-cors
+torch
+torchvision
+timm
 pillow
+pytorch-grad-cam
+numpy
