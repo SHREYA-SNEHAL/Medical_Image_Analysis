@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediScan AI — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#060b14;
+  --surface:#0d1520;
+  --surface2:#111d2e;
+  --border:#1e3050;
+  --accent:#00d4ff;
+  --accent2:#0096ff;
+  --green:#00e5a0;
+  --red:#ff4757;
+  --text:#e8f4ff;
+  --muted:#5a7a9a;
+  --font-head:'Syne',sans-serif;
+  --font-body:'DM Sans',sans-serif;
+}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  min-height:100vh;
+  display:flex;
+  overflow:hidden;
+}
+
+/* LEFT PANEL */
+.left-panel{
+  width:55%;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:60px;
+  overflow:hidden;
+}
+.left-panel::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 50%, rgba(0,212,255,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 80%, rgba(0,150,255,0.06) 0%, transparent 50%);
+}
+.grid-bg{
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+  background-size:40px 40px;
+  animation:gridShift 20s linear infinite;
+}
+@keyframes gridShift{
+  0%{background-position:0 0}
+  100%{background-position:40px 40px}
+}
+.brand{
+  position:relative;
+  z-index:2;
+  margin-bottom:60px;
+}
+.brand-logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:16px;
+}
+.logo-icon{
+  width:48px;height:48px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;
+  box-shadow:0 0 30px rgba(0,212,255,0.3);
+}
+.brand-name{
+  font-family:var(--font-head);
+  font-size:28px;
+  font-weight:800;
+  letter-spacing:-0.5px;
+  background:linear-gradient(135deg,var(--text),var(--accent));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.hero-text{
+  position:relative;
+  z-index:2;
+}
+.hero-text h1{
+  font-family:var(--font-head);
+  font-size:52px;
+  font-weight:800;
+  line-height:1.1;
+  letter-spacing:-2px;
+  margin-bottom:20px;
+}
+.hero-text h1 span{
+  background:linear-gradient(135deg,var(--accent),var(--green));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.hero-text p{
+  font-size:17px;
+  color:var(--muted);
+  line-height:1.7;
+  max-width:420px;
+  font-weight:300;
+}
+.stats-row{
+  position:relative;
+  z-index:2;
+  display:flex;
+  gap:40px;
+  margin-top:60px;
+}
+.stat{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.stat-num{
+  font-family:var(--font-head);
+  font-size:32px;
+  font-weight:800;
+  background:linear-gradient(135deg,var(--accent),var(--text));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.stat-label{
+  font-size:12px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-weight:500;
+}
+
+/* Floating scan card */
+.scan-preview{
+  position:absolute;
+  bottom:80px;
+  right:-20px;
+  width:220px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  z-index:3;
+  animation:float 4s ease-in-out infinite;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+}
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+.scan-preview-label{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:var(--accent);
+  font-weight:600;
+  margin-bottom:12px;
+}
+.scan-bar{
+  height:6px;
+  border-radius:3px;
+  background:var(--border);
+  margin-bottom:8px;
+  overflow:hidden;
+}
+.scan-bar-fill{
+  height:100%;
+  border-radius:3px;
+  animation:scanAnim 3s ease-in-out infinite;
+}
+@keyframes scanAnim{
+  0%,100%{width:84%}
+  50%{width:91%}
+}
+.bar1{background:linear-gradient(90deg,var(--accent),var(--accent2));width:84%}
+.bar2{background:linear-gradient(90deg,var(--green),#00b37d);width:61%}
+.bar3{background:linear-gradient(90deg,#ffa040,#ff6040);width:29%}
+.scan-disease{
+  font-family:var(--font-head);
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:4px;
+}
+.scan-conf{
+  font-size:11px;
+  color:var(--muted);
+}
+
+/* RIGHT PANEL — Form */
+.right-panel{
+  width:45%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:60px 50px;
+  background:var(--surface);
+  border-left:1px solid var(--border);
+  position:relative;
+}
+.right-panel::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2),var(--green));
+}
+.form-container{width:100%;max-width:380px}
+.form-title{
+  font-family:var(--font-head);
+  font-size:30px;
+  font-weight:800;
+  margin-bottom:8px;
+  letter-spacing:-1px;
+}
+.form-subtitle{
+  font-size:14px;
+  color:var(--muted);
+  margin-bottom:40px;
+}
+
+/* Tabs */
+.tabs{
+  display:flex;
+  background:var(--bg);
+  border-radius:10px;
+  padding:4px;
+  margin-bottom:32px;
+  border:1px solid var(--border);
+}
+.tab{
+  flex:1;
+  padding:10px;
+  text-align:center;
+  border-radius:8px;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.2s;
+  color:var(--muted);
+  font-family:var(--font-head);
+}
+.tab.active{
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  color:#000;
+}
+
+.field{margin-bottom:20px}
+.field label{
+  display:block;
+  font-size:12px;
+  font-weight:600;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:8px;
+}
+.field input,.field select{
+  width:100%;
+  padding:13px 16px;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:10px;
+  color:var(--text);
+  font-family:var(--font-body);
+  font-size:14px;
+  outline:none;
+  transition:all 0.2s;
+}
+.field input:focus,.field select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(0,212,255,0.1);
+}
+.field select option{background:var(--bg)}
+
+.btn-primary{
+  width:100%;
+  padding:14px;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  border:none;
+  border-radius:10px;
+  color:#000;
+  font-family:var(--font-head);
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  transition:all 0.2s;
+  letter-spacing:0.5px;
+  margin-top:8px;
+}
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 30px rgba(0,212,255,0.3);
+}
+.btn-primary:active{transform:translateY(0)}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
+.error-msg{
+  background:rgba(255,71,87,0.1);
+  border:1px solid rgba(255,71,87,0.3);
+  border-radius:8px;
+  padding:12px 16px;
+  font-size:13px;
+  color:var(--red);
+  margin-bottom:20px;
+  display:none;
+}
+.success-msg{
+  background:rgba(0,229,160,0.1);
+  border:1px solid rgba(0,229,160,0.3);
+  border-radius:8px;
+  padding:12px 16px;
+  font-size:13px;
+  color:var(--green);
+  margin-bottom:20px;
+  display:none;
+}
+
+/* Register extra fields */
+#register-fields{display:none}
+
+.spinner{
+  display:inline-block;
+  width:16px;height:16px;
+  border:2px solid rgba(0,0,0,0.3);
+  border-top-color:#000;
+  border-radius:50%;
+  animation:spin 0.6s linear infinite;
+  margin-right:8px;
+  vertical-align:middle;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- LEFT PANEL -->
+<div class="left-panel">
+  <div class="grid-bg"></div>
+
+  <div class="brand">
+    <div class="brand-logo">
+      <div class="logo-icon">🫁</div>
+      <span class="brand-name">MediScan AI</span>
+    </div>
+  </div>
+
+  <div class="hero-text">
+    <h1>Medical Imaging<br/><span>Reimagined</span><br/>with AI</h1>
+    <p>Upload X-Ray or MRI scans and get instant AI-powered disease detection with confidence scores, heatmaps, and detailed reports.</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat">
+      <span class="stat-num">22+</span>
+      <span class="stat-label">Diseases Detected</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">2</span>
+      <span class="stat-label">Scan Types</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">95%</span>
+      <span class="stat-label">Accuracy</span>
+    </div>
+  </div>
+
+  <div class="scan-preview">
+    <div class="scan-preview-label">Live Analysis</div>
+    <div class="scan-disease">Pneumonia</div>
+    <div class="scan-conf">84.3% confidence</div>
+    <br/>
+    <div class="scan-bar"><div class="scan-bar-fill bar1" style="width:84%"></div></div>
+    <div class="scan-bar"><div class="scan-bar-fill bar2" style="width:61%"></div></div>
+    <div class="scan-bar"><div class="scan-bar-fill bar3" style="width:29%"></div></div>
+  </div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right-panel">
+  <div class="form-container">
+    <div class="form-title">Welcome Back</div>
+    <div class="form-subtitle">Sign in to your account to continue</div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('login')">Sign In</div>
+      <div class="tab" onclick="switchTab('register')">Register</div>
+    </div>
+
+    <!-- Messages -->
+    <div class="error-msg" id="error-msg"></div>
+    <div class="success-msg" id="success-msg"></div>
+
+    <!-- Login Form -->
+    <div id="login-form">
+      <div class="field">
+        <label>Email Address</label>
+        <input type="email" id="login-email" placeholder="doctor@hospital.com"/>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••"/>
+      </div>
+      <button class="btn-primary" onclick="handleLogin()" id="login-btn">
+        Sign In
+      </button>
+    </div>
+
+    <!-- Register Form -->
+    <div id="register-fields">
+      <div class="field">
+        <label>Full Name</label>
+        <input type="text" id="reg-name" placeholder="Dr. John Smith"/>
+      </div>
+      <div class="field">
+        <label>Email Address</label>
+        <input type="email" id="reg-email" placeholder="doctor@hospital.com"/>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="reg-password" placeholder="••••••••"/>
+      </div>
+      <div class="field">
+        <label>Role</label>
+        <select id="reg-role">
+          <option value="patient">Patient</option>
+          <option value="doctor">Doctor</option>
+        </select>
+      </div>
+      <button class="btn-primary" onclick="handleRegister()" id="register-btn">
+        Create Account
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:4000/api';
+
+function switchTab(tab) {
+  const tabs = document.querySelectorAll('.tab');
+  tabs[0].classList.toggle('active', tab === 'login');
+  tabs[1].classList.toggle('active', tab === 'register');
+  document.getElementById('login-form').style.display    = tab === 'login'    ? 'block' : 'none';
+  document.getElementById('register-fields').style.display = tab === 'register' ? 'block' : 'none';
+  hideMessages();
+
+  // Update title
+  document.querySelector('.form-title').textContent    = tab === 'login' ? 'Welcome Back'    : 'Create Account';
+  document.querySelector('.form-subtitle').textContent = tab === 'login' ? 'Sign in to your account to continue' : 'Join MediScan AI today';
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
+  document.getElementById('success-msg').style.display = 'none';
+}
+function showSuccess(msg) {
+  const el = document.getElementById('success-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
+  document.getElementById('error-msg').style.display = 'none';
+}
+function hideMessages() {
+  document.getElementById('error-msg').style.display   = 'none';
+  document.getElementById('success-msg').style.display = 'none';
+}
+
+async function handleLogin() {
+  const email    = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const btn      = document.getElementById('login-btn');
+
+  if (!email || !password) return showError('Please fill all fields');
+
+  btn.disabled   = true;
+  btn.innerHTML  = '<span class="spinner"></span>Signing in...';
+
+  try {
+    const res  = await fetch(`${API}/auth/login`, {
+      method : 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body   : JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+
+    if (!res.ok) return showError(data.message || 'Login failed');
+
+    // Save token and role
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('role',  data.role);
+
+    showSuccess('Login successful! Redirecting...');
+    setTimeout(() => {
+      window.location.href = 'dashboard.html';
+    }, 1000);
+
+  } catch (e) {
+    showError('Server error. Make sure backend is running.');
+  } finally {
+    btn.disabled  = false;
+    btn.innerHTML = 'Sign In';
+  }
+}
+
+async function handleRegister() {
+  const name     = document.getElementById('reg-name').value.trim();
+  const email    = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-password').value;
+  const role     = document.getElementById('reg-role').value;
+  const btn      = document.getElementById('register-btn');
+
+  if (!name || !email || !password) return showError('Please fill all fields');
+
+  btn.disabled  = true;
+  btn.innerHTML = '<span class="spinner"></span>Creating account...';
+
+  try {
+    const res  = await fetch(`${API}/auth/register`, {
+      method : 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body   : JSON.stringify({ name, email, password, role })
+    });
+    const data = await res.json();
+
+    if (!res.ok) return showError(data.message || 'Registration failed');
+
+    showSuccess('Account created! Please sign in.');
+    setTimeout(() => switchTab('login'), 1500);
+
+  } catch (e) {
+    showError('Server error. Make sure backend is running.');
+  } finally {
+    btn.disabled  = false;
+    btn.innerHTML = 'Create Account';
+  }
+}
+
+// Check if already logged in
+if (localStorage.getItem('token')) {
+  window.location.href = 'dashboard.html';
+}
+
+// Enter key support
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const loginVisible = document.getElementById('login-form').style.display !== 'none';
+    if (loginVisible || !document.getElementById('register-fields').style.display || document.getElementById('register-fields').style.display === 'none') {
+      handleLogin();
+    } else {
+      handleRegister();
+    }
+  }
+});
+</script>
+</body>
+</html>

@@ -184,6 +184,17 @@ def predict():
                 key=lambda x: x[1], reverse=True
             )
 
+            top_confidence = results[0][1] * 100
+
+            if top_confidence < 20:
+                # Nothing detected with confidence — likely normal or non-medical image
+                return jsonify({
+                    'imageType'  : 'Chest X-Ray',
+                    'disease'    : 'No Finding',
+                    'confidence' : round((1 - results[0][1]) * 100, 1),
+                    'message'    : 'No significant disease detected. Regular checkup recommended.'
+                })
+
             top_disease    = results[0][0]
             top_confidence = round(results[0][1] * 100, 1)
 
@@ -228,6 +239,15 @@ def predict():
 
             top_disease    = results[0][0].replace('_', ' ').title()
             top_confidence = round(results[0][1] * 100, 1)
+
+            # ---- NEW: Reject non-medical images ----
+            if top_confidence < 25:
+                return jsonify({
+                    'imageType'  : 'Brain MRI',
+                    'disease'    : 'Inconclusive',
+                    'confidence' : top_confidence,
+                    'message'    : 'Image quality too low or not a valid MRI scan. Please upload a proper brain MRI image.'
+                })
 
             # Patient — only disease + confidence
             if role == 'patient':

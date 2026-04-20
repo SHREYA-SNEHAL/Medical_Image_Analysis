@@ -15,6 +15,9 @@ sequelize.sync().then(() => {
   app.listen(4000, () => console.log("Server running on port 4000"));
 });
 
+const path = require('path');
+app.use(express.static(path.join(__dirname, 'frontend')));
+
 // http://localhost:4000/api/...
 //Add header:
 // Key          	Value

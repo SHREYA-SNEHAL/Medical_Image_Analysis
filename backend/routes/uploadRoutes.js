@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/authMiddleware");
 const upload = require("../middleware/uploadMiddleware");
-const { uploadImage } = require("../controllers/uploadController");
+const { uploadImage,getHistory} = require("../controllers/uploadController");
 
 router.post(
   "/upload",
@@ -10,5 +10,7 @@ router.post(
   upload.single("image"),
   uploadImage
 );
+router.get("/history", auth, getHistory);
+// router.get("/report/:id", auth, downloadReport);
 
 module.exports = router;

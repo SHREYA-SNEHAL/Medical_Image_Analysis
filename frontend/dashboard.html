@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediScan AI — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#060b14;
+  --surface:#0d1520;
+  --surface2:#111d2e;
+  --border:#1e3050;
+  --accent:#00d4ff;
+  --accent2:#0096ff;
+  --green:#00e5a0;
+  --orange:#ffa040;
+  --red:#ff4757;
+  --text:#e8f4ff;
+  --muted:#5a7a9a;
+  --font-head:'Syne',sans-serif;
+  --font-body:'DM Sans',sans-serif;
+}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  min-height:100vh;
+  display:flex;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:260px;
+  min-height:100vh;
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  padding:30px 20px;
+  position:fixed;
+  top:0;left:0;bottom:0;
+  z-index:100;
+}
+.sidebar-brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:40px;
+  padding:0 8px;
+}
+.logo-icon{
+  width:40px;height:40px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;
+  box-shadow:0 0 20px rgba(0,212,255,0.2);
+}
+.brand-name{
+  font-family:var(--font-head);
+  font-size:20px;
+  font-weight:800;
+  background:linear-gradient(135deg,var(--text),var(--accent));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.nav-section{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:var(--muted);
+  font-weight:600;
+  padding:0 8px;
+  margin-bottom:8px;
+  margin-top:20px;
+}
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 14px;
+  border-radius:10px;
+  cursor:pointer;
+  transition:all 0.2s;
+  font-size:14px;
+  font-weight:500;
+  color:var(--muted);
+  margin-bottom:4px;
+  text-decoration:none;
+}
+.nav-item:hover{
+  background:var(--surface2);
+  color:var(--text);
+}
+.nav-item.active{
+  background:linear-gradient(135deg,rgba(0,212,255,0.15),rgba(0,150,255,0.1));
+  color:var(--accent);
+  border:1px solid rgba(0,212,255,0.2);
+}
+.nav-icon{font-size:18px}
+
+.sidebar-bottom{
+  margin-top:auto;
+  padding:0 8px;
+}
+.user-card{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:12px;
+}
+.user-role-badge{
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:20px;
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:6px;
+}
+.role-doctor{background:rgba(0,212,255,0.15);color:var(--accent)}
+.role-patient{background:rgba(0,229,160,0.15);color:var(--green)}
+.user-name{
+  font-family:var(--font-head);
+  font-size:14px;
+  font-weight:700;
+}
+.btn-logout{
+  width:100%;
+  padding:10px;
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:8px;
+  color:var(--muted);
+  font-family:var(--font-body);
+  font-size:13px;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-logout:hover{border-color:var(--red);color:var(--red)}
+
+/* MAIN */
+.main{
+  margin-left:260px;
+  flex:1;
+  padding:40px;
+  min-height:100vh;
+}
+
+/* PAGE SECTIONS */
+.page-section{display:none}
+.page-section.active{display:block}
+
+/* TOP BAR */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:40px;
+}
+.page-title{
+  font-family:var(--font-head);
+  font-size:32px;
+  font-weight:800;
+  letter-spacing:-1px;
+}
+.page-title span{
+  background:linear-gradient(135deg,var(--accent),var(--green));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* UPLOAD SECTION */
+.upload-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:28px;
+}
+.card-title{
+  font-family:var(--font-head);
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+.card-sub{
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:24px;
+}
+
+/* Upload Zone */
+.upload-zone{
+  border:2px dashed var(--border);
+  border-radius:12px;
+  padding:40px 20px;
+  text-align:center;
+  cursor:pointer;
+  transition:all 0.2s;
+  position:relative;
+  margin-bottom:20px;
+}
+.upload-zone:hover,.upload-zone.dragover{
+  border-color:var(--accent);
+  background:rgba(0,212,255,0.04);
+}
+.upload-zone input[type=file]{
+  position:absolute;inset:0;
+  opacity:0;cursor:pointer;width:100%;height:100%;
+}
+.upload-icon{font-size:40px;margin-bottom:12px}
+.upload-zone p{font-size:14px;color:var(--muted)}
+.upload-zone strong{color:var(--accent)}
+
+#preview-img{
+  width:100%;
+  border-radius:10px;
+  margin-bottom:16px;
+  border:1px solid var(--border);
+  display:none;
+  max-height:200px;
+  object-fit:contain;
+  background:#000;
+}
+
+/* Form fields */
+.form-row{margin-bottom:16px}
+.form-row label{
+  display:block;
+  font-size:11px;
+  font-weight:600;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:6px;
+}
+.form-row select,.form-row input{
+  width:100%;
+  padding:11px 14px;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:8px;
+  color:var(--text);
+  font-family:var(--font-body);
+  font-size:13px;
+  outline:none;
+  transition:all 0.2s;
+}
+.form-row select:focus,.form-row input:focus{
+  border-color:var(--accent);
+}
+.form-row select option{background:var(--bg)}
+
+.btn-scan{
+  width:100%;
+  padding:13px;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  border:none;
+  border-radius:10px;
+  color:#000;
+  font-family:var(--font-head);
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-scan:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,212,255,0.3)}
+.btn-scan:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
+/* Results */
+.result-card{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:20px;
+  margin-top:20px;
+  display:none;
+}
+.result-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:16px;
+}
+.result-disease{
+  font-family:var(--font-head);
+  font-size:22px;
+  font-weight:800;
+}
+.risk-badge{
+  padding:5px 14px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+.risk-high{background:rgba(255,71,87,0.15);color:var(--red);border:1px solid rgba(255,71,87,0.3)}
+.risk-medium{background:rgba(255,160,64,0.15);color:var(--orange);border:1px solid rgba(255,160,64,0.3)}
+.risk-low{background:rgba(0,229,160,0.15);color:var(--green);border:1px solid rgba(0,229,160,0.3)}
+
+.chance-bar-wrap{margin-bottom:16px}
+.chance-label{
+  display:flex;justify-content:space-between;
+  font-size:12px;color:var(--muted);margin-bottom:6px;
+}
+.chance-bar{
+  height:8px;background:var(--border);
+  border-radius:4px;overflow:hidden;
+}
+.chance-fill{
+  height:100%;border-radius:4px;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+  transition:width 1s ease;
+}
+
+.result-message{
+  font-size:13px;color:var(--muted);
+  background:var(--bg);
+  border-radius:8px;padding:12px;
+  margin-bottom:12px;
+  border-left:3px solid var(--accent);
+}
+
+.guidance-block{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px;
+  margin-bottom:10px;
+}
+.guidance-label{
+  font-size:12px;
+  font-weight:700;
+  color:var(--accent);
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:8px;
+  font-family:var(--font-head);
+}
+.guidance-text{
+  font-size:13px;
+  color:var(--text);
+  line-height:1.6;
+}
+.guidance-list{
+  list-style:none;
+  padding:0;
+}
+.guidance-list li{
+  font-size:13px;
+  color:var(--text);
+  padding:4px 0;
+  padding-left:16px;
+  position:relative;
+  line-height:1.5;
+}
+.guidance-list li::before{
+  content:'•';
+  position:absolute;
+  left:0;
+  color:var(--accent);
+}
+/* Top 5 (doctor) */
+.top5-list{margin-top:16px}
+.top5-item{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:10px;
+}
+.top5-rank{
+  width:22px;height:22px;
+  background:var(--bg);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:var(--muted);
+  flex-shrink:0;
+}
+.top5-name{font-size:13px;flex:1}
+.top5-bar{
+  width:80px;height:4px;
+  background:var(--border);border-radius:2px;overflow:hidden;
+}
+.top5-fill{height:100%;background:var(--accent2);border-radius:2px}
+.top5-pct{font-size:12px;color:var(--muted);width:40px;text-align:right}
+
+/* Heatmap */
+.heatmap-wrap{
+  margin-top:16px;
+  border-radius:10px;
+  overflow:hidden;
+  border:1px solid var(--border);
+}
+.heatmap-wrap img{width:100%;display:block}
+.heatmap-label{
+  padding:8px 12px;
+  font-size:11px;color:var(--muted);
+  background:var(--bg);
+  text-align:center;
+}
+
+/* Second opinion */
+.second-opinion{
+  background:rgba(255,160,64,0.08);
+  border:1px solid rgba(255,160,64,0.3);
+  border-radius:8px;
+  padding:10px 14px;
+  font-size:12px;
+  color:var(--orange);
+  margin-top:12px;
+}
+
+/* HISTORY SECTION */
+.history-filters{
+  display:flex;gap:12px;
+  margin-bottom:24px;
+}
+.filter-btn{
+  padding:8px 18px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--muted);
+  font-family:var(--font-body);
+  font-size:13px;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.filter-btn.active,.filter-btn:hover{
+  border-color:var(--accent);
+  color:var(--accent);
+  background:rgba(0,212,255,0.06);
+}
+
+.history-table{
+  width:100%;
+  border-collapse:collapse;
+}
+.history-table th{
+  text-align:left;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  color:var(--muted);
+  font-weight:600;
+  padding:12px 16px;
+  border-bottom:1px solid var(--border);
+}
+.history-table td{
+  padding:14px 16px;
+  border-bottom:1px solid rgba(30,48,80,0.5);
+  font-size:13px;
+}
+.history-table tr:hover td{
+  background:rgba(255,255,255,0.02);
+}
+.type-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:3px 10px;
+  border-radius:6px;
+  font-size:11px;font-weight:600;
+}
+.type-xray{background:rgba(0,150,255,0.1);color:var(--accent2)}
+.type-mri{background:rgba(0,229,160,0.1);color:var(--green)}
+
+.pagination{
+  display:flex;align-items:center;justify-content:flex-end;
+  gap:8px;margin-top:20px;
+}
+.page-btn{
+  width:34px;height:34px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--muted);
+  font-size:13px;cursor:pointer;
+  transition:all 0.2s;
+  display:flex;align-items:center;justify-content:center;
+}
+.page-btn:hover,.page-btn.active{
+  border-color:var(--accent);
+  color:var(--accent);
+  background:rgba(0,212,255,0.08);
+}
+.page-btn:disabled{opacity:0.3;cursor:not-allowed}
+
+/* Loading state */
+.loading-row td{
+  text-align:center;
+  padding:40px;
+  color:var(--muted);
+}
+.spinner{
+  display:inline-block;
+  width:20px;height:20px;
+  border:2px solid var(--border);
+  border-top-color:var(--accent);
+  border-radius:50%;
+  animation:spin 0.6s linear infinite;
+  margin-right:8px;
+  vertical-align:middle;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.empty-state{
+  text-align:center;
+  padding:60px 20px;
+  color:var(--muted);
+}
+.empty-state .empty-icon{font-size:48px;margin-bottom:16px}
+.empty-state p{font-size:14px}
+
+/* Notification toast */
+.toast{
+  position:fixed;
+  bottom:30px;right:30px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px 20px;
+  font-size:13px;
+  display:flex;align-items:center;gap:10px;
+  transform:translateY(100px);
+  opacity:0;
+  transition:all 0.3s;
+  z-index:999;
+  box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-color:rgba(0,229,160,0.4)}
+.toast.error{border-color:rgba(255,71,87,0.4)}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-brand">
+    <div class="logo-icon">🫁</div>
+    <span class="brand-name">MediScan AI</span>
+  </div>
+
+  <div class="nav-section">Main</div>
+  <a class="nav-item active" onclick="showPage('upload')" href="#">
+    <span class="nav-icon">🔬</span> Scan Analysis
+  </a>
+  <a class="nav-item" onclick="showPage('history')" href="#">
+    <span class="nav-icon">📋</span> Upload History
+  </a>
+
+  <div class="sidebar-bottom">
+    <div class="user-card">
+      <div class="user-role-badge" id="role-badge">Patient</div>
+      <div class="user-name" id="user-name-display">Loading...</div>
+    </div>
+    <button class="btn-logout" onclick="logout()">Sign Out</button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <!-- ===================== UPLOAD PAGE ===================== -->
+  <div class="page-section active" id="page-upload">
+    <div class="topbar">
+      <div>
+        <div class="page-title">Scan <span>Analysis</span></div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">Upload medical images for AI-powered disease detection</div>
+      </div>
+    </div>
+
+    <div class="upload-grid">
+      <!-- Upload Card -->
+      <div class="card">
+        <div class="card-title">Upload Image</div>
+        <div class="card-sub">Supports X-Ray and MRI scan images (PNG, JPG)</div>
+
+        <div class="upload-zone" id="upload-zone">
+          <input type="file" id="file-input" accept=".png,.jpg,.jpeg" onchange="handleFileSelect(event)"/>
+          <div class="upload-icon">🩻</div>
+          <p><strong>Click to upload</strong> or drag & drop</p>
+          <p style="font-size:12px;margin-top:6px">PNG, JPG up to 10MB</p>
+        </div>
+
+        <img id="preview-img" alt="Preview"/>
+
+        <div class="form-row">
+          <label>Image Type</label>
+          <select id="image-type">
+            <option value="xray">Chest X-Ray</option>
+            <option value="mri">Brain MRI</option>
+          </select>
+        </div>
+
+        <button class="btn-scan" onclick="analyzeImage()" id="scan-btn">
+          🔍 Analyze Image
+        </button>
+      </div>
+
+      <!-- Results Card -->
+      <div class="card">
+        <div class="card-title">Analysis Results</div>
+        <div class="card-sub">AI-powered detection results will appear here</div>
+
+        <!-- Empty state -->
+        <div class="empty-state" id="result-empty">
+          <div class="empty-icon">🔬</div>
+          <p>Upload a scan to see results</p>
+        </div>
+
+        <!-- Results -->
+        <div class="result-card" id="result-card">
+          <div class="result-header">
+            <div>
+              <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px" id="result-type"></div>
+              <div class="result-disease" id="result-disease"></div>
+            </div>
+            <div class="risk-badge" id="risk-badge"></div>
+          </div>
+
+          <!-- No Disease Message -->
+          <div id="no-disease-msg" style="display:none;text-align:center;padding:30px 20px">
+            <div style="font-size:50px;margin-bottom:16px">✅</div>
+            <div style="font-family:var(--font-head);font-size:20px;font-weight:800;
+                        color:var(--green);margin-bottom:8px">
+              No Disease Detected
+            </div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.6;max-width:280px;margin:0 auto">
+              Your scan appears normal. No significant disease was found by the AI analysis.
+              Continue regular health checkups.
+            </div>
+            <div style="margin-top:20px;padding:12px 16px;
+                        background:rgba(0,229,160,0.08);
+                        border:1px solid rgba(0,229,160,0.3);
+                        border-radius:10px;font-size:12px;color:var(--muted)">
+              Always consult a doctor for professional medical advice.
+            </div>
+          </div>
+
+          <div class="chance-bar-wrap" id="chance-bar-wrap">
+            <div class="chance-label">
+              <span>Chance of Occurrence</span>
+              <span id="chance-pct"></span>
+            </div>
+            <div class="chance-bar">
+              <div class="chance-fill" id="chance-fill" style="width:0%"></div>
+            </div>
+          </div>
+
+          <div class="result-message" id="result-message"></div>
+
+          <!-- Second opinion flag -->
+          <div class="second-opinion" id="second-opinion" style="display:none"></div>
+          
+          <!-- Health Guidance Section -->
+        <div id="guidance-section" style="display:none;margin-top:20px">
+
+          <div class="guidance-block">
+            <div class="guidance-label">🔍 Explanation</div>
+            <div id="guidance-explanation" class="guidance-text"></div>
+          </div>
+
+          <div class="guidance-block">
+            <div class="guidance-label">⚠️ Suggested Guidance</div>
+            <ul id="guidance-precautions" class="guidance-list"></ul>
+          </div>
+
+          <div class="guidance-block">
+            <div class="guidance-label">🥗 Food Recommendations</div>
+            <div style="font-size:12px;color:var(--green);font-weight:600;margin-bottom:4px">Eat:</div>
+            <ul id="guidance-eat" class="guidance-list"></ul>
+            <div style="font-size:12px;color:var(--red);font-weight:600;margin:8px 0 4px">Avoid:</div>
+            <ul id="guidance-avoid" class="guidance-list"></ul>
+          </div>
+
+          <div class="guidance-block">
+            <div class="guidance-label">🏃 Activity</div>
+            <div id="guidance-activity" class="guidance-text"></div>
+          </div>
+
+          <div class="guidance-block" style="background:rgba(255,160,64,0.08);border-color:rgba(255,160,64,0.3)">
+            <div class="guidance-label" style="color:var(--orange)">📝 Note</div>
+            <div id="guidance-note" class="guidance-text"></div>
+          </div>
+
+          <div class="guidance-block">
+            <div class="guidance-label">👉 Next Steps</div>
+            <ul id="guidance-nextsteps" class="guidance-list"></ul>
+          </div>
+
+          <div class="guidance-block" style="background:rgba(90,122,154,0.08);border-color:rgba(90,122,154,0.3)">
+            <div id="guidance-disclaimer" style="font-size:11px;color:var(--muted);font-style:italic;line-height:1.6"></div>
+          </div>
+
+          </div>
+          <!-- Doctor: recommendation -->
+          <div id="doctor-recommendation" style="display:none">
+            <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Recommendation</div>
+            <div style="font-size:13px;line-height:1.6" id="rec-text"></div>
+          </div>
+
+          <!-- Doctor: Top 5 -->
+          <div id="doctor-top5" style="display:none;margin-top:16px">
+            <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">All Findings</div>
+            <div class="top5-list" id="top5-list"></div>
+          </div>
+
+          <!-- Doctor: Heatmap -->
+          <div id="doctor-heatmap" style="display:none;margin-top:16px">
+            <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Grad-CAM Heatmap</div>
+            <div class="heatmap-wrap">
+              <img id="heatmap-img" alt="Heatmap"/>
+              <div class="heatmap-label">Highlighted regions show areas of concern</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== HISTORY PAGE ===================== -->
+  <div class="page-section" id="page-history">
+    <div class="topbar">
+      <div>
+        <div class="page-title">Upload <span>History</span></div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">All your past scan analyses</div>
+      </div>
+      <button class="btn-scan" style="width:auto;padding:11px 24px" onclick="loadHistory(1)">
+        🔄 Refresh
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="history-filters">
+        <button class="filter-btn active" onclick="filterHistory('all',this)">All Scans</button>
+        <button class="filter-btn" onclick="filterHistory('xray',this)">X-Ray</button>
+        <button class="filter-btn" onclick="filterHistory('mri',this)">MRI</button>
+      </div>
+
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Scan Type</th>
+            <th>Disease Detected</th>
+            <th>Chance %</th>
+            <th>Risk Level</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="history-tbody">
+          <tr class="loading-row">
+            <td colspan="6"><span class="spinner"></span>Loading history...</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+const API   = 'http://localhost:4000/api';
+const token = localStorage.getItem('token');
+const role  = localStorage.getItem('role');
+
+// ---- Auth check ----
+if (!token) window.location.href = 'login.html';
+
+// ---- Set role display ----
+const roleBadge = document.getElementById('role-badge');
+roleBadge.textContent = role === 'doctor' ? '👨‍⚕️ Doctor' : '🧑 Patient';
+roleBadge.className = 'user-role-badge ' + (role === 'doctor' ? 'role-doctor' : 'role-patient');
+
+// ---- Navigation ----
+function showPage(page) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (page === 'history') loadHistory(1);
+}
+
+// ---- Toast ----
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = (type === 'success' ? '✅ ' : '❌ ') + msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ---- Logout ----
+function logout() {
+  localStorage.clear();
+  window.location.href = 'login.html';
+}
+
+// ---- File Select ----
+function handleFileSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById('preview-img');
+    img.src = e.target.result;
+    img.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+  // Reset results
+  document.getElementById('result-card').style.display  = 'none';
+  document.getElementById('result-empty').style.display = 'block';
+}
+
+// Drag & drop
+const zone = document.getElementById('upload-zone');
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+zone.addEventListener('drop', e => {
+  e.preventDefault();
+  zone.classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    document.getElementById('file-input').files = e.dataTransfer.files;
+    handleFileSelect({ target: { files: e.dataTransfer.files } });
+  }
+});
+
+// ---- Analyze Image ----
+async function analyzeImage() {
+  const fileInput = document.getElementById('file-input');
+  const imageType = document.getElementById('image-type').value;
+  const btn       = document.getElementById('scan-btn');
+
+  if (!fileInput.files[0]) return showToast('Please select an image first', 'error');
+
+  btn.disabled  = true;
+  btn.innerHTML = '<span class="spinner"></span>Analyzing...';
+
+  try {
+    const formData = new FormData();
+    formData.append('image',     fileInput.files[0]);
+    formData.append('imageType', imageType);
+
+    const res  = await fetch(`${API}/upload/upload`, {
+      method : 'POST',
+      headers: { 'Authorization': token },
+      body   : formData
+    });
+    const data = await res.json();
+
+    if (!res.ok) return showToast(data.error || 'Analysis failed', 'error');
+
+    displayResults(data);
+    showToast('Analysis complete!');
+
+  } catch (e) {
+    showToast('Server error. Check backend is running.', 'error');
+  } finally {
+    btn.disabled  = false;
+    btn.innerHTML = '🔍 Analyze Image';
+  }
+}
+
+// ---- Display Results ----
+function displayResults(data) {
+  document.getElementById('result-empty').style.display = 'none';
+  const card = document.getElementById('result-card');
+  card.style.display = 'block';
+
+  // ---- NO DISEASE DETECTED ----
+  if (data.noDisease) {
+    document.getElementById('result-type').textContent    = data.imageType || '';
+    document.getElementById('result-disease').textContent = data.disease   || 'No Disease Detected';
+
+    // Hide everything except disease name
+    document.getElementById('chance-bar-wrap').style.display      = 'none';
+    document.getElementById('risk-badge').style.display           = 'none';
+    document.getElementById('result-message').style.display       = 'none';
+    document.getElementById('second-opinion').style.display       = 'none';
+    document.getElementById('guidance-section').style.display     = 'none';
+    document.getElementById('doctor-recommendation').style.display = 'none';
+    document.getElementById('doctor-top5').style.display          = 'none';
+    document.getElementById('doctor-heatmap').style.display       = 'none';
+
+    // Show clean no-disease message
+    document.getElementById('no-disease-msg').style.display = 'block';
+    return; // stop here — dont show anything else
+  }
+
+  // ---- DISEASE DETECTED — show everything ----
+
+  // Hide no-disease message
+  document.getElementById('no-disease-msg').style.display = 'none';
+
+  // Show all sections back
+  document.getElementById('chance-bar-wrap').style.display = 'block';
+  document.getElementById('risk-badge').style.display      = 'inline-block';
+  document.getElementById('result-message').style.display  = 'block';
+
+  document.getElementById('result-type').textContent    = data.imageType || '';
+  document.getElementById('result-disease').textContent = data.disease   || 'Unknown';
+  document.getElementById('chance-pct').textContent     = `${data.chancePercent}%`;
+  document.getElementById('result-message').textContent = data.message || '';
+
+  // Chance bar
+  setTimeout(() => {
+    document.getElementById('chance-fill').style.width = `${data.chancePercent}%`;
+  }, 100);
+
+  // Risk badge
+  const rb = document.getElementById('risk-badge');
+  rb.textContent = data.riskLevel || '';
+  rb.className = 'risk-badge ' + (
+    data.riskLevel === 'High Risk'   ? 'risk-high'   :
+    data.riskLevel === 'Medium Risk' ? 'risk-medium' : 'risk-low'
+  );
+
+  // Second opinion
+  const so = document.getElementById('second-opinion');
+  if (data.secondOpinion) {
+    so.textContent   = '⚠️ ' + data.secondOpinion;
+    so.style.display = 'block';
+  } else {
+    so.style.display = 'none';
+  }
+
+  // Health Guidance
+  const hg = data.healthGuidance;
+  if (hg) {
+    document.getElementById('guidance-section').style.display = 'block';
+    document.getElementById('guidance-explanation').textContent = hg.explanation;
+    document.getElementById('guidance-precautions').innerHTML =
+      hg.precautions.map(p => `<li>${p}</li>`).join('');
+    document.getElementById('guidance-eat').innerHTML =
+      hg.food.eat.map(f => `<li>${f}</li>`).join('');
+    document.getElementById('guidance-avoid').innerHTML =
+      hg.food.avoid.map(f => `<li>${f}</li>`).join('');
+    document.getElementById('guidance-activity').textContent  = hg.activity;
+    document.getElementById('guidance-note').textContent      = hg.note;
+    document.getElementById('guidance-nextsteps').innerHTML   =
+      hg.nextSteps.map(s => `<li>${s}</li>`).join('');
+    document.getElementById('guidance-disclaimer').textContent = hg.disclaimer;
+  }
+
+  // Doctor fields
+  if (role === 'doctor') {
+    if (data.top5 && data.top5.length) {
+      document.getElementById('doctor-top5').style.display = 'block';
+      const list = document.getElementById('top5-list');
+      list.innerHTML = data.top5.map((item, i) => `
+        <div class="top5-item">
+          <div class="top5-rank">${i+1}</div>
+          <div class="top5-name">${item.disease}</div>
+          <div class="top5-bar">
+            <div class="top5-fill" style="width:${item.confidence}%"></div>
+          </div>
+          <div class="top5-pct">${item.confidence}%</div>
+        </div>
+      `).join('');
+    }
+
+    if (data.heatmap) {
+      document.getElementById('doctor-heatmap').style.display = 'block';
+      document.getElementById('heatmap-img').src = data.heatmap;
+    }
+  }
+}
+
+// ---- Load History ----
+let currentFilter = 'all';
+let currentPage   = 1;
+
+async function loadHistory(page = 1) {
+  currentPage = page;
+  const tbody = document.getElementById('history-tbody');
+  tbody.innerHTML = '<tr class="loading-row"><td colspan="6"><span class="spinner"></span>Loading...</td></tr>';
+
+  try {
+    const res  = await fetch(`${API}/upload/history?page=${page}&limit=10`, {
+      headers: { 'Authorization': token }
+    });
+    const data = await res.json();
+
+    if (!res.ok) return showToast('Failed to load history', 'error');
+
+    let rows = data.history || [];
+
+    // Filter
+    if (currentFilter !== 'all') {
+      rows = rows.filter(r => r.imageType === currentFilter);
+    }
+
+    if (rows.length === 0) {
+      tbody.innerHTML = `
+        <tr><td colspan="6">
+          <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <p>No scan history found</p>
+          </div>
+        </td></tr>`;
+      document.getElementById('pagination').innerHTML = '';
+      return;
+    }
+
+    tbody.innerHTML = rows.map((r, i) => `
+      <tr>
+        <td style="color:var(--muted)">${r.id}</td>
+        <td>
+          <span class="type-badge ${r.imageType === 'xray' ? 'type-xray' : 'type-mri'}">
+            ${r.imageType === 'xray' ? '🫁 X-Ray' : '🧠 MRI'}
+          </span>
+        </td>
+        <td style="font-weight:500">${r.disease || 'N/A'}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:60px;height:4px;background:var(--border);border-radius:2px;overflow:hidden">
+              <div style="width:${r.chancePercent}%;height:100%;background:var(--accent2);border-radius:2px"></div>
+            </div>
+            <span>${r.chancePercent}%</span>
+          </div>
+        </td>
+        <td>
+          <span class="risk-badge ${
+            r.riskLevel === 'High Risk'   ? 'risk-high'   :
+            r.riskLevel === 'Medium Risk' ? 'risk-medium' : 'risk-low'
+          }" style="font-size:10px;padding:3px 10px">
+            ${r.riskLevel}
+          </span>
+        </td>
+        <td style="color:var(--muted)">${new Date(r.date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</td>
+      </tr>
+    `).join('');
+
+    // Pagination
+    renderPagination(data.totalPages, page);
+
+  } catch (e) {
+    tbody.innerHTML = '<tr class="loading-row"><td colspan="6">Failed to load. Check backend.</td></tr>';
+  }
+}
+
+function renderPagination(totalPages, current) {
+  const p = document.getElementById('pagination');
+  if (totalPages <= 1) { p.innerHTML = ''; return; }
+
+  let html = `<button class="page-btn" onclick="loadHistory(${current-1})" ${current===1?'disabled':''}>‹</button>`;
+  for (let i = 1; i <= totalPages; i++) {
+    html += `<button class="page-btn ${i===current?'active':''}" onclick="loadHistory(${i})">${i}</button>`;
+  }
+  html += `<button class="page-btn" onclick="loadHistory(${current+1})" ${current===totalPages?'disabled':''}>›</button>`;
+  p.innerHTML = html;
+}
+
+function filterHistory(type, el) {
+  currentFilter = type;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  loadHistory(1);
+}
+</script>
+</body>
+</html>
